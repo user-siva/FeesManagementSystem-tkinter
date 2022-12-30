@@ -1,6 +1,8 @@
 import customtkinter as ctk
+import ttkbootstrap as ttb
+from ttkbootstrap.constants import *
 from tkinter import *
-from tkinter import messagebox
+from tkinter import messagebox, tix
 from tkinter import ttk, filedialog
 from tkinter.ttk import Treeview, Scrollbar
 from PIL import Image, ImageTk
@@ -17,21 +19,29 @@ import win32api
 ctk.set_appearance_mode("light")
 # ctk.set_default_color_theme("blue")
 
-win = ctk.CTk()
+win = ttb.Window(themename="litera")
 
 # w, h = win.winfo_screenwidth(), win.winfo_screenheight()
 # win.geometry("%dx%d+0+0" % (w, h))
 win.state("zoomed")
 
+helv36 = font.Font(family='Helvetica', size=36, weight='bold')
 login_frame = Frame(win)
 login_frame.place(width=1500, height=2000)
 
-img = Image.open('coins.jpeg')
+#img = Image.open('coins.jpeg')
 
-img1 = ImageTk.PhotoImage(img)
-limg = Label(login_frame, image=img1)
-limg.image = img1
-limg.place(x=0, y=0)
+#img1 = ImageTk.PhotoImage(img)
+limg = Label(login_frame)
+#limg.image = img1
+#limg.place(x=0, y=0)
+
+
+def resize_img(img):
+    image = Image.open(img)
+    image = image.resize((25, 25))
+    image.save(img)
+    return image
 
 
 def login():
@@ -59,16 +69,36 @@ def login():
                 login_frame.place_forget()
                 # tab.place(width=1600, height=50)
                 # tree.pack()
-                # tree_frame.place(x=50, y=60)
+                # tree_frame.place(x=50, y=80)
                 cashier.place(width=900, height=900)
             elif data[3] == 1:
                 login_frame.place_forget()
                 tab.place(width=1600, height=50)
                 tree.pack()
-                tree_frame.place(x=50, y=60)
+                tree_frame.place(x=50, y=80)
+                det_btn.place_forget()
 
         else:
             print("Wrong")
+
+
+head = Label(login_frame, text='Login', font=('Arial', 30))
+head.place(x=1100, y=160)
+user_label1 = Label(login_frame, text='Username:', font=(
+    'Arial', 20), fg='green').place(x=1000, y=220)
+username_ent = ttb.Entry(login_frame, bootstyle="primary", width=28)
+username_ent.place(x=1150, y=230)
+
+pass_label1 = Label(login_frame, text='Password:', font=(
+    'Arial', 20), fg='green').place(x=1000, y=270)
+password_ent = ttb.Entry(login_frame, bootstyle="primary", width=28, show='*')
+password_ent.place(x=1150, y=280)
+
+resize_img("images\login.png")
+
+login_img = PhotoImage(file=r"images\login.png")
+submit_button = ttb.Button(login_frame, text='Login      ', image=login_img, compound=RIGHT, width=15, bootstyle=SUCCESS,
+                           command=login).place(x=1180, y=330, height=40)
 
 
 def open_register():
@@ -84,7 +114,7 @@ def open_register():
 
     Label(win,image=img,border=0,bg='white').place(x=50,y=90)"""
 
-    frame = Frame(win, width=350, height=390, bg='#fff')
+    frame = ttb.Frame(win, width=750, height=550)
     frame.place(x=480, y=50)
 
     heading = Label(frame, text='Sign up', fg="#57a1f8", bg='white',
@@ -108,11 +138,10 @@ def open_register():
         if(len(user.get()) == 0):
             user.insert(0, 'Name')
 
-    user = Entry(frame, width=25, fg="black", borderwidth=0,
-                 highlightthickness=0, bg='white', font=('Microsoft Yahei UI Light', 11))
+    user = ttb.Entry(frame, width=55, font=('Arial', 10), bootstyle="primary")
     user.place(x=30, y=80)
     nametic = Label(frame, text='', bg='white')
-    nametic.place(x=300, y=80)
+    nametic.place(x=430, y=80)
 
     user.insert(0, 'Name')
     user.bind("<FocusIn>", on_enter)
@@ -135,11 +164,10 @@ def open_register():
         if(len(mail.get()) == 0):
             mail.insert(0, 'Mail Id')
 
-    mail = Entry(frame, width=25, fg="black", borderwidth=0,
-                 highlightthickness=0, bg='white', font=('Microsoft Yahei UI Light', 11))
+    mail = ttb.Entry(frame, width=55, font=('Arial', 10), bootstyle="primary")
     mail.place(x=30, y=150)
-    mailtic = Label(frame, text='', bg='white')
-    mailtic.place(x=300, y=150)
+    mailtic = Label(frame, text='')
+    mailtic.place(x=430, y=150)
 
     mail.insert(0, 'Mail Id')
     mail.bind("<FocusIn>", on_enter)
@@ -165,17 +193,17 @@ def open_register():
             password.insert(0, 'Password')
             password.configure(show='')
 
-    password = Entry(frame, width=25, fg="black", borderwidth=0,
-                     highlightthickness=0, bg='white', font=('Microsoft Yahei UI Light', 11))
+    password = ttb.Entry(frame, width=55, font=(
+        'Arial', 10), bootstyle="primary")
     password.place(x=30, y=220)
     passtic = Label(frame, text='', bg='white')
-    passtic.place(x=300, y=220)
+    passtic.place(x=430, y=220)
 
     password.insert(0, 'Password')
     password.bind("<FocusIn>", on_enter)
     # password.bind("<FocusOut>",on_leave)
 
-    Frame(frame, width=295, height=2, bg='black').place(x=25, y=247)
+    #Frame(frame, width=295, height=2, bg='black').place(x=25, y=247)
 
     def on_enter(e):
         if(cpass.get() == 'Conform Password'):
@@ -189,11 +217,10 @@ def open_register():
             cpass.insert(0, 'Conform Password')
             cpass.configure(show='')
 
-    cpass = Entry(frame, width=25, fg="black", borderwidth=0,
-                  highlightthickness=0, bg='white', font=('Microsoft Yahei UI Light', 11))
+    cpass = ttb.Entry(frame, width=55, font=('Arial', 10), bootstyle="primary")
     cpass.place(x=30, y=290)
     cpasstic = Label(frame, text='', bg='white')
-    cpasstic.place(x=300, y=290)
+    cpasstic.place(x=430, y=290)
 
     cpass.insert(0, 'Conform Password')
     cpass.bind("<FocusIn>", on_enter)
@@ -228,26 +255,10 @@ def open_register():
     submit.place(x=30, y=350)
 
 
-head = Label(login_frame, text='Login', font=('Arial', 30), fg='blue')
-head.place(x=1100, y=160)
-user_label1 = Label(login_frame, text='Username:', font=(
-    'Arial', 20), fg='green').place(x=1000, y=220)
-username_ent = Entry(login_frame, width=15, font=('Arial', 15), borderwidth=1,
-                     highlightthickness=0, bg='white', highlightbackground='green')
-username_ent.place(x=1150, y=230)
+register_button = ttb.Button(login_frame, text='Register', width=15,
+                             command=open_register).place(x=1010, y=330, height=40)
 
-pass_label1 = Label(login_frame, text='Password:', font=(
-    'Arial', 20), fg='green').place(x=1000, y=270)
-password_ent = Entry(login_frame, borderwidth=1, highlightthickness=0,
-                     bg='white', width=15, font=('Arial', 15), show='*')
-password_ent.place(x=1150, y=280)
-
-register_button = Button(login_frame, text='Register', width=10, fg='red', bd=1, font=(
-    'Arial', 15), command=open_register).place(x=1010, y=330, height=40)
-submit_button = Button(login_frame, text='Submit', width=10, fg='blue', bd=1, font=(
-    'Arial', 15), command=login).place(x=1180, y=330, height=40)
-
-tab = Frame(win)
+tab = ttb.Frame(win)
 # tab.place(width=1600, height=50)
 
 
@@ -264,19 +275,20 @@ def search():
     tree.see(selections[0])
 
 
-search_entry = ctk.CTkEntry(tab, width=250)
+search_entry = ttb.Entry(tab, width=35)
 search_entry.place(x=880, y=10)
 
-search_btn = ctk.CTkButton(tab, text='Search', command=search, width=100)
+search_btn = ttb.Button(tab, text='Search', command=search, width=10)
 search_btn.place(x=1145, y=10)
 
+
 tree_frame = Frame(win)
-# tree_frame.place(x=50, y=60)
+# tree_frame.place(x=50, y=80)
 
 tree_scroll = Scrollbar(tree_frame)
 tree_scroll.pack(side=RIGHT, fill=BOTH)
 
-tree = ttk.Treeview(
+tree = ttb.Treeview(
     tree_frame, yscrollcommand=tree_scroll.set, height=30, selectmode="extended")
 # tree.pack()
 
@@ -381,12 +393,12 @@ def cpdf():
     messagebox.showinfo("Success", "Report successfully saved")
 
 
-cpdf = ctk.CTkButton(tab, text='GetPdf', command=cpdf)
+cpdf = ttb.Button(tab, text='GetPdf', bootstyle='success', command=cpdf)
 cpdf.place(x=655, y=10)
 
 
-import_btn = ctk.CTkButton(
-    tab, bg='red', text='Import Data', command=import_data)
+import_btn = ttb.Button(
+    tab, text='Import Data', bootstyle='danger', command=import_data)
 import_btn.place(x=50, y=10)
 
 
@@ -403,8 +415,8 @@ def backup():
     conn.close()
 
 
-backup_btn = ctk.CTkButton(
-    tab, bg='red', text='Backup', command=backup, width=100)
+backup_btn = ttb.Button(
+    tab, text='Backup', command=backup, bootstyle='info')
 backup_btn.place(x=1260, y=10)
 
 data = db.execute('''SELECT * from Sheet1''')
@@ -437,137 +449,137 @@ def display_profile(id):
     j = 0
     b = 0
     for col in data.description[:12]:
-        l = ctk.CTkLabel(profile, width=100, text=col[0], fg='blue')
+        l = ctk.CTkLabel(profile, width=60, text=col[0])
         l.grid(row=b, column=0, padx=50, pady=5, sticky='nsew')
         b += 1
     c = 0
     for col in data.description[12:]:
-        l = ctk.CTkLabel(profile, width=100, text=col[0], fg='blue')
+        l = ctk.CTkLabel(profile, width=60, text=col[0])
         l.grid(row=c, column=4, padx=50, pady=5, sticky='nsew')
         c += 1
     for i in data:
         for k in range(len(i)):
             if k == 0:
-                index_ent = ctk.CTkEntry(profile, width=400, fg='blue')
+                index_ent = ttb.Entry(profile, width=60)
                 index_ent.grid(row=j, column=1, padx=5, pady=5, sticky='nsew')
                 index_ent.insert(END, i[k])
             if k == 1:
-                roll_ent = ctk.CTkEntry(profile, width=400, fg='blue')
+                roll_ent = ttb.Entry(profile, width=60)
                 roll_ent.grid(row=j, column=1, padx=5, pady=5, sticky='nsew')
                 roll_ent.insert(END, i[k])
                 rollnum = i[k]
                 roll_no = i[k]
             if k == 2:
-                name_ent = ctk.CTkEntry(profile, width=400, fg='blue')
+                name_ent = ttb.Entry(profile, width=60)
                 name_ent.grid(row=j, column=1, padx=5, pady=5, sticky='nsew')
                 name_ent.insert(END, i[k])
                 name = i[k]
             if k == 3:
-                reg_ent = ctk.CTkEntry(profile, width=400, fg='blue')
+                reg_ent = ttb.Entry(profile, width=60)
                 reg_ent.grid(row=j, column=1, padx=5, pady=5, sticky='nsew')
                 reg_ent.insert(END, i[k])
             if k == 4:
-                year_ent = ctk.CTkEntry(profile, width=400, fg='blue')
+                year_ent = ttb.Entry(profile, width=60)
                 year_ent.grid(row=j, column=1, padx=5, pady=5, sticky='nsew')
                 year_ent.insert(END, i[k])
                 year = i[k]
             if k == 5:
-                dept_ent = ctk.CTkEntry(profile, width=400, fg='blue')
+                dept_ent = ttb.Entry(profile, width=60)
                 dept_ent.grid(row=j, column=1, padx=5, pady=5, sticky='nsew')
                 dept_ent.insert(END, i[k])
                 dept = i[k]
             if k == 6:
-                py_ent = ctk.CTkEntry(profile, width=400, fg='blue')
+                py_ent = ttb.Entry(profile, width=60)
                 py_ent.grid(row=j, column=1, padx=5, pady=5, sticky='nsew')
                 py_ent.insert(END, i[k])
                 pyb = i[k]
             if k == 7:
-                ad_ent = ctk.CTkEntry(profile, width=400, fg='blue')
+                ad_ent = ttb.Entry(profile, width=60)
                 ad_ent.grid(row=j, column=1, padx=5, pady=5, sticky='nsew')
                 ad_ent.insert(END, i[k])
                 adfee = i[k]
             if k == 8:
-                tu_ent = ctk.CTkEntry(profile, width=400, fg='blue')
+                tu_ent = ttb.Entry(profile, width=60)
                 tu_ent.grid(row=j, column=1, padx=5, pady=5, sticky='nsew')
                 tu_ent.insert(END, i[k])
                 tufee = i[k]
             if k == 9:
-                bus_ent = ctk.CTkEntry(profile, width=400, fg='blue')
+                bus_ent = ttb.Entry(profile, width=60)
                 bus_ent.grid(row=j, column=1, padx=5, pady=5, sticky='nsew')
                 bus_ent.insert(END, i[k])
                 busfee = i[k]
             if k == 10:
-                hos_ent = ctk.CTkEntry(profile, width=400, fg='blue')
+                hos_ent = ttb.Entry(profile, width=60)
                 hos_ent.grid(row=j, column=1, padx=5, pady=5, sticky='nsew')
                 hos_ent.insert(END, i[k])
                 hosfee = i[k]
             if k == 11:
-                tot_ent = ctk.CTkEntry(profile, width=400, fg='blue')
+                tot_ent = ttb.Entry(profile, width=60)
                 tot_ent.grid(row=j, column=1, padx=5, pady=5, sticky='nsew')
                 tot_ent.insert(END, i[k])
                 totfee = i[k]
             if k == 12:
-                fgg_ent = ctk.CTkEntry(profile, width=400, fg='blue')
+                fgg_ent = ttb.Entry(profile, width=60)
                 fgg_ent.grid(row=j-12, column=8, padx=5, pady=5, sticky='nsew')
                 fgg_ent.insert(END, i[k])
                 fgg = i[k]
             if k == 13:
-                pmss_ent = ctk.CTkEntry(profile, width=400, fg='blue')
+                pmss_ent = ttb.Entry(profile, width=60)
                 pmss_ent.grid(row=j-12, column=8, padx=5,
                               pady=5, sticky='nsew')
                 pmss_ent.insert(END, i[k])
                 pmss = i[k]
             if k == 14:
-                gov_ent = ctk.CTkEntry(profile, width=400, fg='blue')
+                gov_ent = ttb.Entry(profile, width=60)
                 gov_ent.grid(row=j-12, column=8, padx=5, pady=5, sticky='nsew')
                 gov_ent.insert(END, i[k])
                 gov = i[k]
             if k == 15:
-                other_ent = ctk.CTkEntry(profile, width=400, fg='blue')
+                other_ent = ttb.Entry(profile, width=60)
                 other_ent.grid(row=j-12, column=8, padx=5,
                                pady=5, sticky='nsew')
                 other_ent.insert(END, i[k])
                 other = i[k]
             if k == 16:
-                ket_ent = ctk.CTkEntry(profile, width=400, fg='blue')
+                ket_ent = ttb.Entry(profile, width=60)
                 ket_ent.grid(row=j-12, column=8, padx=5, pady=5, sticky='nsew')
                 ket_ent.insert(END, i[k])
                 ket = i[k]
             if k == 17:
-                pay_ent = ctk.CTkEntry(profile, width=400, fg='blue')
+                pay_ent = ttb.Entry(profile, width=60)
                 pay_ent.grid(row=j-12, column=8, padx=5, pady=5, sticky='nsew')
                 pay_ent.insert(END, i[k])
                 pay = i[k]
             if k == 18:
-                sctot_ent = ctk.CTkEntry(profile, width=400, fg='blue')
+                sctot_ent = ttb.Entry(profile, width=60)
                 sctot_ent.grid(row=j-12, column=8, padx=5,
                                pady=5, sticky='nsew')
                 sctot_ent.insert(END, i[k])
                 sctot = i[k]
             if k == 19:
-                rem_ent = ctk.CTkEntry(profile, width=400, fg='blue')
+                rem_ent = ttb.Entry(profile, width=60)
                 rem_ent.grid(row=j-12, column=8, padx=5, pady=5, sticky='nsew')
                 rem_ent.insert(END, i[k])
                 rem = i[k]
             if k == 20:
-                paid_ent = ctk.CTkEntry(profile, width=400, fg='blue')
+                paid_ent = ttb.Entry(profile, width=60)
                 paid_ent.grid(row=j-12, column=8, padx=5,
                               pady=5, sticky='nsew')
                 paid_ent.insert(END, i[k])
                 paid = i[k]
             if k == 21:
-                bal_ent = ctk.CTkEntry(profile, width=400, fg='blue')
+                bal_ent = ttb.Entry(profile, width=60)
                 bal_ent.grid(row=j-12, column=8, padx=5, pady=5, sticky='nsew')
                 bal_ent.insert(END, i[k])
                 bal = i[k]
             if k == 22:
-                totf_ent = ctk.CTkEntry(profile, width=400, fg='blue')
+                totf_ent = ttb.Entry(profile, width=60)
                 totf_ent.grid(row=j-12, column=8, padx=5,
                               pady=5, sticky='nsew')
                 totf_ent.insert(END, i[k])
                 totfpaid = i[k]
             if k == 23:
-                cbal_ent = ctk.CTkEntry(profile, width=400, fg='blue')
+                cbal_ent = ttb.Entry(profile, width=60)
                 cbal_ent.grid(row=j-12, column=8, padx=5,
                               pady=5, sticky='nsew')
                 cbal_ent.insert(END, i[k])
@@ -582,8 +594,8 @@ def display_profile(id):
         db.commit()
         q = db.execute("SELECT * FROM Sheet1")
         messagebox.showinfo('Success', "Data updated Successfully")
-    sub_btn = ctk.CTkButton(
-        win, text="Update", command=submit_record)
+    sub_btn = ttb.Button(
+        win, text="Update", bootstyle='success', command=submit_record)
     sub_btn.place(x=600, y=500)
 
     bill_frame = Frame(win)
@@ -597,12 +609,13 @@ def display_profile(id):
         dis = {}
         for i in data:
             for k in range(1, len(i)):
-                e = ctk.CTkEntry(bill_frame, width=400, fg='blue')
-                e.grid(row=j, column=k, padx=5, pady=5, sticky='nsew')
+                e = ttb.Entry(bill_frame, width=60)
+                e.grid(row=j, column=k+1, padx=5, pady=5, sticky='nsew')
                 e.insert(END, i[k])
                 lis.append(e.get())
+            li.append(lis)
+            lis = []
             j += 1
-        li.append(lis)
 
         print("lis:", li)
 
@@ -611,9 +624,10 @@ def display_profile(id):
             display_profile(roll_no)
             profile.pack(pady=30)
 
-        back_bill = ctk.CTkButton(
-            bill_frame, pady=20, text="Back", command=back_bill)
-        back_bill.grid(row=0, column=1)
+        back_bill = ttb.Button(
+            bill_frame, text="Back", bootstyle='danger', command=back_bill)
+        back_bill.grid(row=0, column=1, sticky='')
+        back_bill.grid_columnconfigure((0, 1, 2), weight=1)
 
         def update_bill():
             db = sqlite3.connect('data.db')
@@ -629,11 +643,11 @@ def display_profile(id):
                 # print(li[j][0].get())
                 j += 1
 
-        update_bill = ctk.CTkButton(
-            bill_frame, pady=20, text="Update", command=update_bill)
-        update_bill.grid(row=10, column=3)
+        update_bill = ttb.Button(
+            bill_frame, text="Update", bootstyle='success', command=update_bill)
+        update_bill.grid(row=10, column=4)
 
-        bill_frame.pack()
+        bill_frame.pack(anchor=N, fill=BOTH, expand=True, side=LEFT)
         Getpdf.place_forget()
         sub_btn.place_forget()
         profile.pack_forget()
@@ -641,7 +655,7 @@ def display_profile(id):
         tab.place_forget()
         det_btn.place_forget()
 
-    det_btn = ctk.CTkButton(
+    det_btn = ttb.Button(
         win, text="Bill Details", command=bill_details)
     det_btn.place(x=1000, y=500)
 
@@ -700,8 +714,8 @@ def display_profile(id):
         roll = roll_ent.get()
         pdf.output(roll+".pdf")
         messagebox.showinfo('Success', 'Report Successfully saved')
-    Getpdf = ctk.CTkButton(
-        win, text="Get Pdf", command=getpdf)
+    Getpdf = ttb.Button(
+        win, text="Get Pdf", bootstyle='warning', command=getpdf)
     Getpdf.place(x=800, y=500)
 
     def back():
@@ -712,11 +726,11 @@ def display_profile(id):
         profile.pack_forget()
         # db.close()
         # profile.pack_forget()
-        tree_frame.place(x=50, y=60)
+        tree_frame.place(x=50, y=80)
         # tab.place()
 
-    back = ctk.CTkButton(
-        win, text="Back", command=back)
+    back = ttb.Button(
+        win, text="Back", bootstyle='danger', command=back)
     back.place(x=40, y=10)
 
 
@@ -814,7 +828,7 @@ def ccpdf():
     messagebox.showinfo("Success", "Report successfully saved")
 
 
-cpdf = ctk.CTkButton(cashier, text='GetPdf', command=ccpdf)
+cpdf = ttb.Button(cashier, text='GetPdf', bootstyle='warning', command=ccpdf)
 cpdf.place(x=655, y=10)
 
 head = Label(cashier, text='Billing System', font=('Courier', 23))
@@ -823,18 +837,18 @@ head.place(x=540, y=100)
 
 roll_label = ctk.CTkLabel(cashier, text='Roll No')
 roll_label.place(x=420, y=180)
-roll = ctk.CTkEntry(cashier, border=0, width=300)
+roll = ttb.Entry(cashier,  width=300)
 roll.place(x=530, y=180, height=25)
 
 
 billno_label = ctk.CTkLabel(cashier, text="Bill No")
 billno_label.place(x=420, y=230)
-billno = ctk.CTkEntry(cashier, border=0, width=300)
+billno = ttb.Entry(cashier,  width=300)
 billno.place(x=530, y=230, height=25)
 
 amount_label = ctk.CTkLabel(cashier, text="Amount")
 amount_label.place(x=420, y=280)
-amount = ctk.CTkEntry(cashier, border=0, width=300)
+amount = ttb.Entry(cashier,  width=300)
 amount.place(x=530, y=280, height=25)
 
 

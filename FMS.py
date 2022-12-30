@@ -115,12 +115,12 @@ def open_register():
 
     Label(win,image=img,border=0,bg='white').place(x=50,y=90)"""
 
-    frame = ttb.Frame(win, width=750, height=550)
-    frame.place(x=480, y=50)
+    frame = Frame(win)
+    frame.pack(anchor=N, fill=BOTH, expand=True, side=LEFT)
 
     heading = Label(frame, text='Sign up', fg="#57a1f8", bg='white',
                     font=('Microsoft Yahei UI Light', 23, 'bold'))
-    heading.place(x=100, y=5)
+    heading.place(x=570, y=15)
 
     def on_enter(e):
         if(user.get() == 'Name'):
@@ -140,7 +140,7 @@ def open_register():
             user.insert(0, 'Name')
 
     user = ttb.Entry(frame, width=55, font=('Arial', 10), bootstyle="primary")
-    user.place(x=30, y=80)
+    user.place(x=430, y=120, height=40)
     nametic = Label(frame, text='', bg='white')
     nametic.place(x=430, y=80)
 
@@ -166,15 +166,13 @@ def open_register():
             mail.insert(0, 'Mail Id')
 
     mail = ttb.Entry(frame, width=55, font=('Arial', 10), bootstyle="primary")
-    mail.place(x=30, y=150)
+    mail.place(x=430, y=185,  height=40)
     mailtic = Label(frame, text='')
     mailtic.place(x=430, y=150)
 
     mail.insert(0, 'Mail Id')
     mail.bind("<FocusIn>", on_enter)
     mail.bind("<FocusOut>", on_leave)
-
-    Frame(frame, width=295, height=2, bg='black').place(x=25, y=177)
 
     def on_enter(e):
         if(password.get() == 'Password'):
@@ -196,7 +194,7 @@ def open_register():
 
     password = ttb.Entry(frame, width=55, font=(
         'Arial', 10), bootstyle="primary")
-    password.place(x=30, y=220)
+    password.place(x=430, y=250, height=40)
     passtic = Label(frame, text='', bg='white')
     passtic.place(x=430, y=220)
 
@@ -219,7 +217,7 @@ def open_register():
             cpass.configure(show='')
 
     cpass = ttb.Entry(frame, width=55, font=('Arial', 10), bootstyle="primary")
-    cpass.place(x=30, y=290)
+    cpass.place(x=430, y=315,  height=40)
     cpasstic = Label(frame, text='', bg='white')
     cpasstic.place(x=430, y=290)
 
@@ -252,16 +250,23 @@ def open_register():
 
         con.commit()
 
-    submit = ctk.CTkButton(frame, text='SignUp', bg='#2effff', command=store)
-    submit.place(x=30, y=350)
+    resize_img("images\in.png")
+    register_img = PhotoImage(file=r"images\in.png")
+    submit = ttb.Button(frame, text='SignUp',
+                        image=register_img, compound=RIGHT, bootstyle='primary-outline', command=store)
+    submit.image = register_img
+    submit.place(x=570, y=400, height=40)
 
     def back():
         login_frame.place(width=1500, height=2000)
         frame.place_forget()
 
+    resize_img("images\previous.png")
+    previous_img = PhotoImage(file=r"images\previous.png")
     back = ttb.Button(
-        win, text="Back", bootstyle='danger', command=back)
-    back.place(x=40, y=10)
+        frame, text="Back", bootstyle='danger-outline', image=previous_img, compound=LEFT, command=back)
+    back.image = previous_img
+    back.place(x=40, y=10, height=40)
 
 
 register_button = ttb.Button(login_frame, text='Register', width=15,

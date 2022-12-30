@@ -255,6 +255,14 @@ def open_register():
     submit = ctk.CTkButton(frame, text='SignUp', bg='#2effff', command=store)
     submit.place(x=30, y=350)
 
+    def back():
+        login_frame.place(width=1500, height=2000)
+        frame.place_forget()
+
+    back = ttb.Button(
+        win, text="Back", bootstyle='danger', command=back)
+    back.place(x=40, y=10)
+
 
 register_button = ttb.Button(login_frame, text='Register', width=15,
                              command=open_register).place(x=1010, y=330, height=40)
@@ -277,10 +285,13 @@ def search():
 
 
 search_entry = ttb.Entry(tab, width=35)
-search_entry.place(x=880, y=10)
+search_entry.place(x=880, y=10, height=40)
 
-search_btn = ttb.Button(tab, text='Search', command=search, width=10)
-search_btn.place(x=1145, y=10)
+resize_img("images\search.png")
+search_img = PhotoImage(file=r"images\search.png")
+search_btn = ttb.Button(tab, text='Search    ', image=search_img, bootstyle='ingo-outline',
+                        compound=RIGHT, command=search)
+search_btn.place(x=1130, y=10)
 
 
 tree_frame = Frame(win)
@@ -394,7 +405,10 @@ def cpdf():
     messagebox.showinfo("Success", "Report successfully saved")
 
 
-cpdf = ttb.Button(tab, text='GetPdf', bootstyle='success', command=cpdf)
+resize_img("images\download (1).png")
+pdf_img = PhotoImage(file=r"images\download (1).png")
+cpdf = ttb.Button(tab, text='GetPdf', image=pdf_img,
+                  compound=RIGHT, bootstyle='success', command=cpdf)
 cpdf.place(x=655, y=10)
 
 resize_img("images\import.png")
@@ -417,8 +431,10 @@ def backup():
     conn.close()
 
 
+resize_img("images\cloud.png")
+backup_img = PhotoImage(file=r"images\cloud.png")
 backup_btn = ttb.Button(
-    tab, text='Backup', command=backup, bootstyle='info')
+    tab, text='Backup', command=backup, image=backup_img, compound=RIGHT, bootstyle='info')
 backup_btn.place(x=1260, y=10)
 
 data = db.execute('''SELECT * from Sheet1''')
@@ -716,8 +732,11 @@ def display_profile(id):
         roll = roll_ent.get()
         pdf.output(roll+".pdf")
         messagebox.showinfo('Success', 'Report Successfully saved')
+
+    resize_img("images\download (1).png")
+    pdf_img1 = PhotoImage(file=r"images\download (1).png")
     Getpdf = ttb.Button(
-        win, text="Get Pdf", bootstyle='warning', command=getpdf)
+        win, text="Get Pdf    ", bootstyle='warning', image=pdf_img1, compound=RIGHT, command=getpdf)
     Getpdf.place(x=800, y=500)
 
     def back():
@@ -830,7 +849,10 @@ def ccpdf():
     messagebox.showinfo("Success", "Report successfully saved")
 
 
-cpdf = ttb.Button(cashier, text='GetPdf', bootstyle='warning', command=ccpdf)
+resize_img("images\download (1).png")
+pdf_img2 = PhotoImage(file=r"images\download (1).png")
+cpdf = ttb.Button(cashier, text='GetPdf    ', image=pdf_img2,
+                  compound=RIGHT, bootstyle='warning', command=ccpdf)
 cpdf.place(x=655, y=10)
 
 head = Label(cashier, text='Billing System', font=('Courier', 23))

@@ -1,6 +1,7 @@
 import customtkinter as ctk
 import ttkbootstrap as ttb
 from ttkbootstrap.constants import *
+import tkinter as tk
 from tkinter import *
 from tkinter import messagebox, tix
 from tkinter import ttk, filedialog
@@ -94,11 +95,11 @@ pass_label1 = Label(login_frame, text='Password:', font=(
 password_ent = ttb.Entry(login_frame, bootstyle="primary", width=28, show='*')
 password_ent.place(x=1150, y=280)
 
-resize_img("images\login.png")
-
-login_img = PhotoImage(file=r"images\login.png")
-submit_button = ttb.Button(login_frame, text='Login      ', image=login_img, compound=RIGHT, width=15, bootstyle=SUCCESS,
-                           command=login).place(x=1180, y=330, height=40)
+resize_img("images\enter.png")
+img = PhotoImage(file=r"images\enter.png")
+sub_button = ttb.Button(login_frame, text='Login      ', image=img, compound=RIGHT,
+                        bootstyle=(SUCCESS, OUTLINE), command=login)
+sub_button.place(x=1180, y=330, height=40)
 
 
 def open_register():
@@ -396,9 +397,10 @@ def cpdf():
 cpdf = ttb.Button(tab, text='GetPdf', bootstyle='success', command=cpdf)
 cpdf.place(x=655, y=10)
 
-
+resize_img("images\import.png")
+import_img = PhotoImage(file=r"images\import.png")
 import_btn = ttb.Button(
-    tab, text='Import Data', bootstyle='danger', command=import_data)
+    tab, text='Import Data    ', bootstyle='danger', image=import_img, compound=RIGHT, command=import_data)
 import_btn.place(x=50, y=10)
 
 

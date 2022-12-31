@@ -26,7 +26,6 @@ win = ttb.Window(themename="litera")
 # win.geometry("%dx%d+0+0" % (w, h))
 win.state("zoomed")
 
-helv36 = font.Font(family='Helvetica', size=36, weight='bold')
 login_frame = Frame(win)
 login_frame.place(width=1500, height=2000)
 
@@ -50,7 +49,7 @@ def login():
     pwd = password_ent.get()
 
     if uname == '' or pwd == '':
-        messagebox.showerror("fill the empty field")
+        messagebox.showerror("Error", "fill the empty field")
     else:
         con = sqlite3.connect('data.db')
         cursor = con.cursor()
@@ -77,10 +76,10 @@ def login():
                 tab.place(width=1600, height=50)
                 tree.pack()
                 tree_frame.place(x=50, y=80)
-                det_btn.place_forget()
+                # det_btn.place_forget()
 
         else:
-            print("Wrong")
+            messagebox.showinfo('Wrong', "Incorrect username or password")
 
 
 head = Label(login_frame, text='Login', font=('Arial', 30))
@@ -269,9 +268,12 @@ def open_register():
     back.place(x=40, y=10, height=40)
 
 
-register_button = ttb.Button(login_frame, text='Register', width=15,
-                             command=open_register).place(x=1010, y=330, height=40)
-
+resize_img(r"images\big.png")
+user_img = PhotoImage(file=r"images\big.png")
+register_button = ttb.Button(login_frame, text='Register   ', image=user_img, compound=RIGHT,
+                             command=open_register)
+register_button.place(x=1010, y=330, height=40)
+register_button.image = user_img
 tab = ttb.Frame(win)
 # tab.place(width=1600, height=50)
 
@@ -334,20 +336,20 @@ def import_data():
             print(i)
 
 
-deptdrop = ctk.CTkOptionMenu(
-    tab, values=["CSE", "ECE", "EEE", "MECH", "CIVIL"])
-deptdrop.place(x=350, y=10)
-deptdrop.set("select a Department")
+varlist = StringVar(tab)
+deptdrop = ttk.OptionMenu(
+    tab, varlist, "Select a Department", "CSE", "ECE", "EEE", "MECH", "CIVIL")
+deptdrop.place(x=350, y=10, height=40)
 
-yeardrop = ctk.CTkOptionMenu(
-    tab, values=["1 Year", "2 Year", "3 Year", "4 Year"])
-yeardrop.place(x=510, y=10)
-yeardrop.set("select a year")
+opt = StringVar(tab)
+yeardrop = ttk.OptionMenu(
+    tab, opt, "Select Year", "1 Year", "2 Year", "3 Year", "4 Year")
+yeardrop.place(x=510, y=10, height=40)
 
 
 def cpdf():
-    deptname = deptdrop.get()
-    yearval = yeardrop.get()[0]
+    deptname = varlist.get()
+    yearval = opt.get()[0]
 
     datas = db.execute(
         "SELECT * FROM Sheet1 Where Department=? AND Year=?", (deptname, yearval))
@@ -617,8 +619,12 @@ def display_profile(id):
         db.commit()
         q = db.execute("SELECT * FROM Sheet1")
         messagebox.showinfo('Success', "Data updated Successfully")
+
+    resize_img("images\circular.png")
+    update_img1 = PhotoImage(file=r"images\circular.png")
     sub_btn = ttb.Button(
-        win, text="Update", bootstyle='success', command=submit_record)
+        win, text="Update    ", bootstyle='success-outline', image=update_img1, compound=RIGHT, command=submit_record)
+    sub_btn.image = update_img1
     sub_btn.place(x=600, y=500)
 
     bill_frame = Frame(win)
@@ -647,8 +653,11 @@ def display_profile(id):
             display_profile(roll_no)
             profile.pack(pady=30)
 
+        resize_img("images\previous.png")
+        previous_img1 = PhotoImage(file=r"images\previous.png")
         back_bill = ttb.Button(
-            bill_frame, text="Back", bootstyle='danger', command=back_bill)
+            bill_frame, text="Back", bootstyle='danger-outline', image=previous_img1, compound=LEFT, command=back_bill)
+        back.image = previous_img1
         back_bill.grid(row=0, column=1, sticky='')
         back_bill.grid_columnconfigure((0, 1, 2), weight=1)
 
@@ -666,8 +675,11 @@ def display_profile(id):
                 # print(li[j][0].get())
                 j += 1
 
+        resize_img("images\circular.png")
+        update_img = PhotoImage(file=r"images\circular.png")
         update_bill = ttb.Button(
-            bill_frame, text="Update", bootstyle='success', command=update_bill)
+            bill_frame, text="Update   ", bootstyle='success-outline', image=update_img, compound=RIGHT, command=update_bill)
+        update_bill.image = update_img
         update_bill.grid(row=10, column=4)
 
         bill_frame.pack(anchor=N, fill=BOTH, expand=True, side=LEFT)
@@ -678,8 +690,11 @@ def display_profile(id):
         tab.place_forget()
         det_btn.place_forget()
 
+    resize_img(r"images\report.png")
+    det_img1 = PhotoImage(file=r"images\report.png")
     det_btn = ttb.Button(
-        win, text="Bill Details", command=bill_details)
+        win, text="Bill Details   ", command=bill_details, image=det_img1, compound=RIGHT, bootstyle='warning')
+    det_btn.image = det_img1
     det_btn.place(x=1000, y=500)
 
     def getpdf():
@@ -741,12 +756,14 @@ def display_profile(id):
     resize_img("images\download (1).png")
     pdf_img1 = PhotoImage(file=r"images\download (1).png")
     Getpdf = ttb.Button(
-        win, text="Get Pdf    ", bootstyle='warning', image=pdf_img1, compound=RIGHT, command=getpdf)
+        win, text="Get Pdf    ", bootstyle='success', image=pdf_img1, compound=RIGHT, command=getpdf)
+    Getpdf.image = pdf_img1
     Getpdf.place(x=800, y=500)
 
     def back():
         tab.place(width=1600, height=50)
         back.place_forget()
+        det_btn.place_forget()
         Getpdf.place_forget()
         sub_btn.place_forget()
         profile.pack_forget()
@@ -755,8 +772,11 @@ def display_profile(id):
         tree_frame.place(x=50, y=80)
         # tab.place()
 
+    resize_img("images\previous.png")
+    previous_img2 = PhotoImage(file=r"images\previous.png")
     back = ttb.Button(
-        win, text="Back", bootstyle='danger', command=back)
+        win, text="Back", bootstyle='danger-outline', image=previous_img2, compound=LEFT, command=back)
+    back.image = previous_img2
     back.place(x=40, y=10)
 
 
@@ -790,9 +810,10 @@ yeardrop.set("select a year")
 
 
 def ccpdf():
-    deptname = deptdrop.get()
-    yearval = yeardrop.get()[0]
-
+    deptname = varlist.get()
+    print(deptname)
+    yearval = opt.get()[0]
+    print(yearval)
     datas = db.execute(
         "SELECT * FROM Sheet1 Where Department=? AND Year=?", (deptname, yearval))
     pdf = FPDF()
@@ -856,7 +877,7 @@ def ccpdf():
 
 resize_img("images\download (1).png")
 pdf_img2 = PhotoImage(file=r"images\download (1).png")
-cpdf = ttb.Button(cashier, text='GetPdf    ', image=pdf_img2,
+cpdf = ttb.Button(cashier, text='Get Pdf    ', image=pdf_img2,
                   compound=RIGHT, bootstyle='warning', command=ccpdf)
 cpdf.place(x=655, y=10)
 

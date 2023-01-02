@@ -444,6 +444,18 @@ backup_btn = ttb.Button(
     tab, text='Backup', command=backup, image=backup_img, compound=RIGHT, bootstyle='info')
 backup_btn.place(x=1260, y=10)
 
+
+def admin_logout():
+    tab.place_forget()
+    tree.pack_forget()
+    tree_frame.place_forget()
+    login_frame.place(width=1500, height=2000)
+
+
+logout_btn = ttb.Button(
+    tree_frame, text='Logout', command=admin_logout, bootstyle='info')
+logout_btn.place(x=1000, y=10)
+
 data = db.execute('''SELECT * from Sheet1''')
 
 cols = [i[0] for i in data.description]

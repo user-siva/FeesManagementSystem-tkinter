@@ -1,6 +1,7 @@
 import customtkinter as ctk
 import ttkbootstrap as ttb
 from ttkbootstrap.constants import *
+from ttkbootstrap.scrolled import ScrolledFrame
 import tkinter as tk
 from tkinter import *
 from tkinter import messagebox, tix
@@ -70,12 +71,12 @@ def login():
                 # tab.place(width=1600, height=50)
                 # tree.pack()
                 # tree_frame.place(x=50, y=80)
-                cashier.place(width=900, height=900)
+                cashier.place(width=1500, height=900)
             elif data[3] == 1:
                 login_frame.place_forget()
-                tab.place(width=1600, height=50)
+                tab.place(width=1600, height=200)
                 tree.pack()
-                tree_frame.place(x=50, y=80)
+                tree_frame.place(x=50, y=130)
                 # det_btn.place_forget()
 
         else:
@@ -87,6 +88,7 @@ head.place(x=1100, y=160)
 user_label1 = Label(login_frame, text='Username:', font=(
     'Arial', 20), fg='green').place(x=1000, y=220)
 username_ent = ttb.Entry(login_frame, bootstyle="primary", width=28)
+username_ent.focus_set()
 username_ent.place(x=1150, y=230)
 
 pass_label1 = Label(login_frame, text='Password:', font=(
@@ -291,7 +293,7 @@ def search():
     tree.see(selections[0])
 
 
-search_entry = ttb.Entry(tab, width=35)
+search_entry = ttb.Entry(tab, width=38)
 search_entry.place(x=880, y=10, height=40)
 
 resize_img("images\search.png")
@@ -416,7 +418,7 @@ resize_img("images\download (1).png")
 pdf_img = PhotoImage(file=r"images\download (1).png")
 cpdf = ttb.Button(tab, text='GetPdf', image=pdf_img,
                   compound=RIGHT, bootstyle='success', command=cpdf)
-cpdf.place(x=655, y=10)
+cpdf.place(x=635, y=10)
 
 resize_img("images\import.png")
 import_img = PhotoImage(file=r"images\import.png")
@@ -442,7 +444,7 @@ resize_img("images\cloud.png")
 backup_img = PhotoImage(file=r"images\cloud.png")
 backup_btn = ttb.Button(
     tab, text='Backup', command=backup, image=backup_img, compound=RIGHT, bootstyle='info')
-backup_btn.place(x=1260, y=10)
+backup_btn.place(x=760, y=10)
 
 
 def admin_logout():
@@ -452,9 +454,11 @@ def admin_logout():
     login_frame.place(width=1500, height=2000)
 
 
+resize_img(r"images\logout.png")
+logout_img = PhotoImage(file=r"images\logout.png")
 logout_btn = ttb.Button(
-    tree_frame, text='Logout', command=admin_logout, bootstyle='info')
-logout_btn.place(x=1000, y=10)
+    tab, text='Logout', command=admin_logout, image=logout_img, compound=RIGHT, bootstyle='danger-outline')
+logout_btn.place(x=1260, y=10, height=40)
 
 data = db.execute('''SELECT * from Sheet1''')
 
@@ -639,26 +643,31 @@ def display_profile(id):
     sub_btn.image = update_img1
     sub_btn.place(x=600, y=500)
 
-    bill_frame = Frame(win)
+    bill_frame = ScrolledFrame(win)
 
     def bill_details():
+        Getpdf.place_forget()
+        sub_btn.place_forget()
+        profile.pack_forget()
+        back.place_forget()
+        tab.place_forget()
+        det_btn.place_forget()
+        bill_frame.pack(anchor=N, fill=BOTH, expand=True, side=LEFT)
+
         data = db.execute(
             '''SELECT * from Bill Where Rollno = ?''', (roll_no,))
         j = 3
         li = []
         lis = []
-        dis = {}
         for i in data:
             for k in range(1, len(i)):
                 e = ttb.Entry(bill_frame, width=60)
                 e.grid(row=j, column=k+1, padx=5, pady=5, sticky='nsew')
                 e.insert(END, i[k])
-                lis.append(e.get())
+                lis.append(e)
             li.append(lis)
             lis = []
             j += 1
-
-        print("lis:", li)
 
         def back_bill():
             bill_frame.pack_forget()
@@ -674,18 +683,21 @@ def display_profile(id):
         back_bill.grid_columnconfigure((0, 1, 2), weight=1)
 
         def update_bill():
+
             db = sqlite3.connect('data.db')
             data = db.execute(
                 'SELECT * from Bill Where Rollno = ?', (roll_no,))
-            d = None
-            j = 0
-            for i in data:
-                billno = i[1]
-                d = db.execute('SELECT * FROM bill WHERE billno=?', (billno,))
-                print("billno", billno)
-                # print(li[i])
-                # print(li[j][0].get())
-                j += 1
+
+            for i in li:
+                billno = i[0].get()
+                date = i[1].get()
+                amount = i[2].get()
+                print("billno:", billno, "date:", date, "amount:", amount)
+                d = (roll_no, billno, date, amount, billno)
+                print("d:", d)
+                db.execute(
+                    "UPDATE Bill SET rollno=?,billno=?,date=?,amount=? WHERE billno=?", d)
+                db.commit()
 
         resize_img("images\circular.png")
         update_img = PhotoImage(file=r"images\circular.png")
@@ -693,14 +705,6 @@ def display_profile(id):
             bill_frame, text="Update   ", bootstyle='success-outline', image=update_img, compound=RIGHT, command=update_bill)
         update_bill.image = update_img
         update_bill.grid(row=10, column=4)
-
-        bill_frame.pack(anchor=N, fill=BOTH, expand=True, side=LEFT)
-        Getpdf.place_forget()
-        sub_btn.place_forget()
-        profile.pack_forget()
-        back.place_forget()
-        tab.place_forget()
-        det_btn.place_forget()
 
     resize_img(r"images\report.png")
     det_img1 = PhotoImage(file=r"images\report.png")
@@ -773,7 +777,7 @@ def display_profile(id):
     Getpdf.place(x=800, y=500)
 
     def back():
-        tab.place(width=1600, height=50)
+        tab.place(width=1600, height=200)
         back.place_forget()
         det_btn.place_forget()
         Getpdf.place_forget()
@@ -810,21 +814,33 @@ cashier = Frame(win)
 con = sqlite3.connect("data.db")
 
 
-deptdrop = ctk.CTkOptionMenu(
-    cashier, values=["CSE", "ECE", "EEE", "MECH", "CIVIL"])
-deptdrop.place(x=350, y=10)
-deptdrop.set("select a Department")
+def cashier_logout():
+    cashier.place_forget()
+    login_frame.place(width=1500, height=2000)
 
-yeardrop = ctk.CTkOptionMenu(
-    cashier, values=["1 Year", "2 Year", "3 Year", "4 Year"])
-yeardrop.place(x=510, y=10)
-yeardrop.set("select a year")
+
+resize_img(r"images\logout.png")
+cas_logout_img = PhotoImage(file=r"images\logout.png")
+cashier_logout_btn = ttb.Button(
+    cashier, text='Log out', bootstyle='danger-outline', image=cas_logout_img, compound=RIGHT, command=cashier_logout)
+cashier_logout_btn.place(x=770, y=10)
+
+
+dep_val = StringVar(cashier)
+deptdrop = ttk.OptionMenu(
+    cashier, dep_val, "Select Department", "CSE", "ECE", "EEE", "MECH", "CIVIL")
+deptdrop.place(x=350, y=10, height=40)
+
+year_val = StringVar(cashier)
+yeardrop = ttk.OptionMenu(
+    cashier, year_val, "Select year", "1 Year", "2 Year", "3 Year", "4 Year")
+yeardrop.place(x=510, y=10, height=40)
 
 
 def ccpdf():
-    deptname = varlist.get()
+    deptname = dep_val.get()
     print(deptname)
-    yearval = opt.get()[0]
+    yearval = year_val.get()[0]
     print(yearval)
     datas = db.execute(
         "SELECT * FROM Sheet1 Where Department=? AND Year=?", (deptname, yearval))
@@ -893,25 +909,32 @@ cpdf = ttb.Button(cashier, text='Get Pdf    ', image=pdf_img2,
                   compound=RIGHT, bootstyle='warning', command=ccpdf)
 cpdf.place(x=655, y=10)
 
-head = Label(cashier, text='Billing System', font=('Courier', 23))
+head = Label(cashier, text='Billing System', font=('Arial', 30))
 head.place(x=540, y=100)
 
 
-roll_label = ctk.CTkLabel(cashier, text='Roll No')
+roll_label = Label(cashier, text='Roll No:')
 roll_label.place(x=420, y=180)
-roll = ttb.Entry(cashier,  width=300)
-roll.place(x=530, y=180, height=25)
+roll = ttb.Entry(cashier,  width=60)
+roll.focus_set()
+roll.place(x=530, y=180, height=40)
 
 
-billno_label = ctk.CTkLabel(cashier, text="Bill No")
+billno_label = Label(cashier, text="Bill No:")
 billno_label.place(x=420, y=230)
-billno = ttb.Entry(cashier,  width=300)
-billno.place(x=530, y=230, height=25)
+billno = ttb.Entry(cashier,  width=60)
+billno.place(x=530, y=230, height=40)
 
-amount_label = ctk.CTkLabel(cashier, text="Amount")
-amount_label.place(x=420, y=280)
-amount = ttb.Entry(cashier,  width=300)
-amount.place(x=530, y=280, height=25)
+date_val = StringVar(cashier)
+date_label = Label(cashier, text="Date:")
+date_label.place(x=420, y=280)
+date_ent = ttb.DateEntry(cashier,  width=60)
+date_ent.place(x=530, y=280, height=40)
+
+amount_label = Label(cashier, text="Amount")
+amount_label.place(x=420, y=320)
+amount = ttb.Entry(cashier,  width=60)
+amount.place(x=530, y=320, height=40)
 
 
 def submit():
@@ -922,7 +945,7 @@ def submit():
     amount_ = amount.get()
     # tkinter.messagebox.showinfo('Print',rollno_)
     x = datetime.datetime.now()
-    date_ = x.strftime("%x").replace('/', '.')
+    date_ = date_ent.entry.get()
     con.execute('''INSERT INTO bill VALUES(?,?,?,?)''',
                 (rollno_, billno_, date_, amount_,))
     con.commit()
@@ -989,14 +1012,17 @@ def submit():
         with io.open(n) as file:
             if file:
                 win32api.ShellExecute(0, "print", file, None, ".", 0)
-    btn = ctk.CTkButton(w, text='print', command=print_bill)
+    btn = ttb.Button(w, text='print', command=print_bill)
     btn.place(x=50, y=170)
     w.geometry('300x300')
     w.mainloop()
 
 
-submit_btn = ctk.CTkButton(cashier, text='Submit', command=submit)
-submit_btn.place(x=690, y=340, height=30)
+resize_img(r"images\upload.png")
+upload_img = PhotoImage(file=r"images\upload.png")
+submit_btn = ttb.Button(cashier, text='Submit   ',
+                        image=upload_img, compound=RIGHT, bootstyle='primary-outline', command=submit)
+submit_btn.place(x=690, y=390, height=40)
 
 
 win.mainloop()

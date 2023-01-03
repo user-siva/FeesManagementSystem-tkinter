@@ -116,12 +116,13 @@ def open_register():
 
     Label(win,image=img,border=0,bg='white').place(x=50,y=90)"""
 
-    frame = Frame(win)
-    frame.pack(anchor=N, fill=BOTH, expand=True, side=LEFT)
+    frame = ttb.Frame(win, width=750, height=550)
+    frame.place(x=480, y=50)
 
-    heading = Label(frame, text='Sign up', fg="#57a1f8", bg='white',
+    heading = Label(frame, text='Sign up',
                     font=('Microsoft Yahei UI Light', 23, 'bold'))
-    heading.place(x=570, y=15)
+    heading.config(fg="#57a1f8", bg='white')
+    heading.place(x=100, y=5)
 
     def on_enter(e):
         if(user.get() == 'Name'):
@@ -129,19 +130,32 @@ def open_register():
 
     def on_leave(e):
         if(len(user.get()) == 0):
+            user.insert(0, 'Name')
             nametic.configure(text=u'\u2717', bg='white', fg='red')
-            messagebox.showerror("showerror", "Name cant be a Null")
+            uerr = "Name can't be Null           "
         else:
             if any(ch.isdigit() for ch in user.get()):
                 nametic.configure(text=u'\u2717', bg='white', fg='red')
-                messagebox.showerror("showerror", "Name cant be a number")
+                uerr = "Name can't be Number          "
+
             else:
                 nametic.config(text=u'\u2713', bg='white', fg='green')
-        if(len(user.get()) == 0):
-            user.insert(0, 'Name')
+                uerr = "                                                                     "
+                global uerr1
+                uerr1 = True
+
+        usererror = Label(frame, text=uerr, font=(
+            'Microsoft Yahei UI Light', 8, 'bold'))
+        usererror.config(fg="red")
+        usererror.place(x=30, y=110)
+
+        if uerr1 and merr1 and perr1 and cerr1:
+            submit.config(state='normal')
+        else:
+            submit.config(state='disabled')
 
     user = ttb.Entry(frame, width=55, font=('Arial', 10), bootstyle="primary")
-    user.place(x=430, y=120, height=40)
+    user.place(x=30, y=80)
     nametic = Label(frame, text='', bg='white')
     nametic.place(x=430, y=80)
 
@@ -160,14 +174,27 @@ def open_register():
             r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
         if re.fullmatch(regex, mail.get()):
             mailtic.config(text=u'\u2713', bg='white', fg='green')
+            merr = "                               "
+            global merr1
+            merr1 = True
         else:
             mailtic.configure(text=u'\u2717', bg='white', fg='red')
-            messagebox.showerror("showerror", "Check Email Id ? ")
-        if(len(mail.get()) == 0):
-            mail.insert(0, 'Mail Id')
+            merr = "Invalid Mail Id"
+            if(len(mail.get()) == 0):
+                mail.insert(0, 'Mail Id')
+
+        mailerror = Label(frame, text=merr, font=(
+            'Microsoft Yahei UI Light', 8, 'bold'))
+        mailerror.config(fg="red")
+        mailerror.place(x=30, y=180)
+
+        if uerr1 and merr1 and perr1 and cerr1:
+            submit.config(state='normal')
+        else:
+            submit.config(state='disabled')
 
     mail = ttb.Entry(frame, width=55, font=('Arial', 10), bootstyle="primary")
-    mail.place(x=430, y=185,  height=40)
+    mail.place(x=30, y=150)
     mailtic = Label(frame, text='')
     mailtic.place(x=430, y=150)
 
@@ -175,58 +202,87 @@ def open_register():
     mail.bind("<FocusIn>", on_enter)
     mail.bind("<FocusOut>", on_leave)
 
+    Frame(frame, width=295, height=2, bg='black').place(x=25, y=177)
+
     def on_enter(e):
         if(password.get() == 'Password'):
             password.delete(0, 'end')
             password.configure(show='*')
 
     def on_leave(e):
+
         regex = re.compile(
             r'^.*(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$')
         if re.findall(regex, password.get()):
             passtic.config(text=u'\u2713', bg='white', fg='green')
+            perr = "                                                                                                  "
+            global perr1
+            perr1 = True
         else:
             passtic.configure(text=u'\u2717', bg='white', fg='red')
-            messagebox.showerror(
-                "showerror", "password must be one Upper,Lower,Digit and Symbol")
+            perr = "Password Must Contains [0-9],[a-z],[A-Z],Symbol and length is 8"
         if(len(password.get()) == 0):
             password.insert(0, 'Password')
             password.configure(show='')
 
+        passerror = Label(frame, text=perr, font=(
+            'Microsoft Yahei UI Light', 8, 'bold'))
+        passerror.config(fg="red")
+        passerror.place(x=30, y=250)
+
+        if uerr1 and merr1 and perr1 and cerr1:
+            submit.config(state='normal')
+        else:
+            submit.config(state='disabled')
+
     password = ttb.Entry(frame, width=55, font=(
         'Arial', 10), bootstyle="primary")
-    password.place(x=430, y=250, height=40)
+    password.place(x=30, y=220)
     passtic = Label(frame, text='', bg='white')
     passtic.place(x=430, y=220)
 
     password.insert(0, 'Password')
     password.bind("<FocusIn>", on_enter)
-    # password.bind("<FocusOut>",on_leave)
+    password.bind("<FocusOut>", on_leave)
 
     #Frame(frame, width=295, height=2, bg='black').place(x=25, y=247)
 
     def on_enter(e):
-        if(cpass.get() == 'Conform Password'):
+        if(cpass.get() == 'Confirm Password'):
             cpass.delete(0, 'end')
             cpass.configure(show='*')
 
     def on_leave(e):
         if(password.get() == cpass.get()):
             cpasstic.config(text=u'\u2713', bg='white', fg='green')
+            cerr = "                                                 "
+            global cerr1
+            cerr1 = True
+        else:
+            cerr = "Password Doesn't Match"
         if(len(cpass.get()) == 0):
-            cpass.insert(0, 'Conform Password')
+            cpass.insert(0, 'Confirm Password')
             cpass.configure(show='')
 
+        cpasserror = Label(frame, text=cerr, font=(
+            'Microsoft Yahei UI Light', 8, 'bold'))
+        cpasserror.config(fg="red")
+        cpasserror.place(x=30, y=320)
+
+        if uerr1 and merr1 and perr1 and cerr1:
+            submit.config(state='normal')
+        else:
+            submit.config(state='disabled')
+
     cpass = ttb.Entry(frame, width=55, font=('Arial', 10), bootstyle="primary")
-    cpass.place(x=430, y=315,  height=40)
+    cpass.place(x=30, y=290)
     cpasstic = Label(frame, text='', bg='white')
     cpasstic.place(x=430, y=290)
 
-    cpass.insert(0, 'Conform Password')
+    cpass.insert(0, 'Confirm Password')
     cpass.bind("<FocusIn>", on_enter)
-    cpass.bind("<FocusOut>", on_leave)
-
-    Frame(frame, width=295, height=2, bg='black').place(x=25, y=317)
+    #cpass.bind("<FocusOut>", on_leave)
+    cpass.bind("<KeyRelease>", on_leave)
 
     def store():
         inpname = user.get()
@@ -251,12 +307,10 @@ def open_register():
 
         con.commit()
 
-    resize_img("images\in.png")
-    register_img = PhotoImage(file=r"images\in.png")
     submit = ttb.Button(frame, text='SignUp',
-                        image=register_img, compound=RIGHT, bootstyle='primary-outline', command=store)
-    submit.image = register_img
-    submit.place(x=570, y=400, height=40)
+                        bootstyle=(SUCCESS, OUTLINE), command=store)
+    submit.place(x=30, y=350)
+    submit.config(state="disabled")
 
     def back():
         login_frame.place(width=1500, height=2000)

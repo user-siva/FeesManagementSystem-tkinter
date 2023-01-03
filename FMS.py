@@ -116,13 +116,13 @@ def open_register():
 
     Label(win,image=img,border=0,bg='white').place(x=50,y=90)"""
 
-    frame = ttb.Frame(win, width=750, height=550)
-    frame.place(x=480, y=50)
+    frame = Frame(win)
+    frame.pack(anchor=N, fill=BOTH, expand=True, side=LEFT)
 
     heading = Label(frame, text='Sign up',
                     font=('Microsoft Yahei UI Light', 23, 'bold'))
     heading.config(fg="#57a1f8", bg='white')
-    heading.place(x=100, y=5)
+    heading.place(x=570, y=15)
 
     def on_enter(e):
         if(user.get() == 'Name'):
@@ -147,7 +147,7 @@ def open_register():
         usererror = Label(frame, text=uerr, font=(
             'Microsoft Yahei UI Light', 8, 'bold'))
         usererror.config(fg="red")
-        usererror.place(x=30, y=110)
+        usererror.place(x=435, y=160)
 
         if uerr1 and merr1 and perr1 and cerr1:
             submit.config(state='normal')
@@ -155,15 +155,14 @@ def open_register():
             submit.config(state='disabled')
 
     user = ttb.Entry(frame, width=55, font=('Arial', 10), bootstyle="primary")
-    user.place(x=30, y=80)
+    user.place(x=430, y=120, height=40)
+    user.focus_set()
     nametic = Label(frame, text='', bg='white')
-    nametic.place(x=430, y=80)
+    nametic.place(x=830, y=125)
 
     user.insert(0, 'Name')
     user.bind("<FocusIn>", on_enter)
     user.bind("<FocusOut>", on_leave)
-
-    Frame(frame, width=295, height=2, bg='black').place(x=25, y=107)
 
     def on_enter(e):
         if(mail.get() == 'Mail Id'):
@@ -186,7 +185,7 @@ def open_register():
         mailerror = Label(frame, text=merr, font=(
             'Microsoft Yahei UI Light', 8, 'bold'))
         mailerror.config(fg="red")
-        mailerror.place(x=30, y=180)
+        mailerror.place(x=435, y=225)
 
         if uerr1 and merr1 and perr1 and cerr1:
             submit.config(state='normal')
@@ -194,15 +193,13 @@ def open_register():
             submit.config(state='disabled')
 
     mail = ttb.Entry(frame, width=55, font=('Arial', 10), bootstyle="primary")
-    mail.place(x=30, y=150)
+    mail.place(x=430, y=185,  height=40)
     mailtic = Label(frame, text='')
-    mailtic.place(x=430, y=150)
+    mailtic.place(x=830, y=190)
 
     mail.insert(0, 'Mail Id')
     mail.bind("<FocusIn>", on_enter)
     mail.bind("<FocusOut>", on_leave)
-
-    Frame(frame, width=295, height=2, bg='black').place(x=25, y=177)
 
     def on_enter(e):
         if(password.get() == 'Password'):
@@ -228,7 +225,7 @@ def open_register():
         passerror = Label(frame, text=perr, font=(
             'Microsoft Yahei UI Light', 8, 'bold'))
         passerror.config(fg="red")
-        passerror.place(x=30, y=250)
+        passerror.place(x=435, y=290)
 
         if uerr1 and merr1 and perr1 and cerr1:
             submit.config(state='normal')
@@ -237,9 +234,9 @@ def open_register():
 
     password = ttb.Entry(frame, width=55, font=(
         'Arial', 10), bootstyle="primary")
-    password.place(x=30, y=220)
+    password.place(x=430, y=250, height=40)
     passtic = Label(frame, text='', bg='white')
-    passtic.place(x=430, y=220)
+    passtic.place(x=830, y=255)
 
     password.insert(0, 'Password')
     password.bind("<FocusIn>", on_enter)
@@ -267,7 +264,7 @@ def open_register():
         cpasserror = Label(frame, text=cerr, font=(
             'Microsoft Yahei UI Light', 8, 'bold'))
         cpasserror.config(fg="red")
-        cpasserror.place(x=30, y=320)
+        cpasserror.place(x=435, y=355)
 
         if uerr1 and merr1 and perr1 and cerr1:
             submit.config(state='normal')
@@ -275,9 +272,9 @@ def open_register():
             submit.config(state='disabled')
 
     cpass = ttb.Entry(frame, width=55, font=('Arial', 10), bootstyle="primary")
-    cpass.place(x=30, y=290)
+    cpass.place(x=430, y=315,  height=40)
     cpasstic = Label(frame, text='', bg='white')
-    cpasstic.place(x=430, y=290)
+    cpasstic.place(x=830, y=320)
 
     cpass.insert(0, 'Confirm Password')
     cpass.bind("<FocusIn>", on_enter)
@@ -309,17 +306,17 @@ def open_register():
 
     submit = ttb.Button(frame, text='SignUp',
                         bootstyle=(SUCCESS, OUTLINE), command=store)
-    submit.place(x=30, y=350)
+    submit.place(x=570, y=400, height=40)
     submit.config(state="disabled")
 
-    def back():
-        login_frame.place(width=1500, height=2000)
+    def back_register():
         frame.place_forget()
+        login_frame.place(width=1500, height=2000)
 
     resize_img("images\previous.png")
     previous_img = PhotoImage(file=r"images\previous.png")
     back = ttb.Button(
-        frame, text="Back", bootstyle='danger-outline', image=previous_img, compound=LEFT, command=back)
+        frame, text="Back", bootstyle='danger-outline', image=previous_img, compound=LEFT, command=back_register)
     back.image = previous_img
     back.place(x=40, y=10, height=40)
 
@@ -348,6 +345,7 @@ def search():
 
 
 search_entry = ttb.Entry(tab, width=38)
+search_entry.focus_set()
 search_entry.place(x=880, y=10, height=40)
 
 resize_img("images\search.png")

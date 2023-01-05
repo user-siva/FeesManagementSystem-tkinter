@@ -1,30 +1,22 @@
-import customtkinter as ctk
 import ttkbootstrap as ttb
 from ttkbootstrap.constants import *
 from ttkbootstrap.scrolled import ScrolledFrame
-import tkinter as tk
 from tkinter import *
-from tkinter import messagebox, tix
+from tkinter import messagebox
 from tkinter import ttk, filedialog
-from tkinter.ttk import Treeview, Scrollbar
-from PIL import Image, ImageTk
-import numpy
+from tkinter.ttk import Scrollbar
+from PIL import Image
 import pandas as pd
 import sqlite3
 from fpdf import FPDF
-import ast
 import re
-import datetime
 import io
-import win32api
-
-ctk.set_appearance_mode("light")
-# ctk.set_default_color_theme("blue")
+import datetime
 
 win = ttb.Window(themename="litera")
 
 # w, h = win.winfo_screenwidth(), win.winfo_screenheight()
-# win.geometry("%dx%d+0+0" % (w, h))
+win.geometry("800x800")
 win.state("zoomed")
 
 login_frame = Frame(win)
@@ -96,8 +88,8 @@ pass_label1 = Label(login_frame, text='Password:', font=(
 password_ent = ttb.Entry(login_frame, bootstyle="primary", width=28, show='*')
 password_ent.place(x=1150, y=280)
 
-resize_img("images\enter.png")
-img = PhotoImage(file=r"images\enter.png")
+resize_img(r"C:\Users\Admin\Documents\python\projects\feemanagement\images\enter.png")
+img = PhotoImage(file=r"C:\Users\Admin\Documents\python\projects\feemanagement\images\enter.png")
 sub_button = ttb.Button(login_frame, text='Login      ', image=img, compound=RIGHT,
                         bootstyle=(SUCCESS, OUTLINE), command=login)
 sub_button.place(x=1180, y=330, height=40)
@@ -156,7 +148,7 @@ def open_register():
 
     user = ttb.Entry(frame, width=55, font=('Arial', 10), bootstyle="primary")
     user.place(x=430, y=120, height=40)
-    user.focus_set()
+    # user.focus_set()
     nametic = Label(frame, text='', bg='white')
     nametic.place(x=830, y=125)
 
@@ -309,20 +301,20 @@ def open_register():
     submit.place(x=570, y=400, height=40)
     submit.config(state="disabled")
 
-    def back_register():
-        frame.place_forget()
-        login_frame.place(width=1500, height=2000)
+    # def back_register():
+    #    frame.place_forget()
+    #   login_frame.place(width=1500, height=2000)
 
-    resize_img("images\previous.png")
-    previous_img = PhotoImage(file=r"images\previous.png")
-    back = ttb.Button(
-        frame, text="Back", bootstyle='danger-outline', image=previous_img, compound=LEFT, command=back_register)
-    back.image = previous_img
-    back.place(x=40, y=10, height=40)
+    # resize_img("images\previous.png")
+    #previous_img = PhotoImage(file=r"C:\Users\Admin\Documents\python\projects\feemanagement\images\previous.png")
+    # back = ttb.Button(
+    # frame, text="Back", bootstyle='danger-outline', image=previous_img, compound=LEFT, command=back_register)
+    #back.image = previous_img
+    #back.place(x=40, y=10, height=40)
 
 
-resize_img(r"images\big.png")
-user_img = PhotoImage(file=r"images\big.png")
+resize_img(r"C:\Users\Admin\Documents\python\projects\feemanagement\images\big.png")
+user_img = PhotoImage(file=r"C:\Users\Admin\Documents\python\projects\feemanagement\images\big.png")
 register_button = ttb.Button(login_frame, text='Register   ', image=user_img, compound=RIGHT,
                              command=open_register)
 register_button.place(x=1010, y=330, height=40)
@@ -348,30 +340,27 @@ search_entry = ttb.Entry(tab, width=38)
 search_entry.focus_set()
 search_entry.place(x=880, y=10, height=40)
 
-resize_img("images\search.png")
-search_img = PhotoImage(file=r"images\search.png")
+resize_img(r"C:\Users\Admin\Documents\python\projects\feemanagement\images\search.png")
+search_img = PhotoImage(file=r"C:\Users\Admin\Documents\python\projects\feemanagement\images\search.png")
 search_btn = ttb.Button(tab, text='Search    ', image=search_img, bootstyle='ingo-outline',
                         compound=RIGHT, command=search)
 search_btn.place(x=1130, y=10)
 
 
 tree_frame = Frame(win)
-# tree_frame.place(x=50, y=80)
+
 
 tree_scroll = Scrollbar(tree_frame)
 tree_scroll.pack(side=RIGHT, fill=BOTH)
 
 tree = ttb.Treeview(
-    tree_frame, yscrollcommand=tree_scroll.set, height=30, selectmode="extended")
-# tree.pack()
+    tree_frame, yscrollcommand=tree_scroll.set, height=35, bootstyle='info', selectmode="extended")
+
 
 tree_scroll.config(command=tree.yview)
 
 
-# db = sqlite3.connect('script.db')
 db = sqlite3.connect('data.db')
-
-# TreeView
 
 
 def import_data():
@@ -409,6 +398,7 @@ def cpdf():
         "SELECT * FROM Sheet1 Where Department=? AND Year=?", (deptname, yearval))
     pdf = FPDF()
     pdf.add_page()
+    pdf.image(r'images/header_word1.jpg', w=190)
     for row in datas:
         pdf.set_font("Arial", size=20, style="BI")
         pdf.set_text_color(7, 145, 134)
@@ -466,14 +456,14 @@ def cpdf():
     messagebox.showinfo("Success", "Report successfully saved")
 
 
-resize_img("images\download (1).png")
-pdf_img = PhotoImage(file=r"images\download (1).png")
+resize_img(r"C:\Users\Admin\Documents\python\projects\feemanagement\images\download (1).png")
+pdf_img = PhotoImage(file=r"C:\Users\Admin\Documents\python\projects\feemanagement\images\download (1).png")
 cpdf = ttb.Button(tab, text='GetPdf', image=pdf_img,
                   compound=RIGHT, bootstyle='success', command=cpdf)
 cpdf.place(x=635, y=10)
 
-resize_img("images\import.png")
-import_img = PhotoImage(file=r"images\import.png")
+resize_img(r"C:\Users\Admin\Documents\python\projects\feemanagement\images\import.png")
+import_img = PhotoImage(file=r"C:\Users\Admin\Documents\python\projects\feemanagement\images\import.png")
 import_btn = ttb.Button(
     tab, text='Import Data    ', bootstyle='danger', image=import_img, compound=RIGHT, command=import_data)
 import_btn.place(x=50, y=10)
@@ -492,8 +482,8 @@ def backup():
     conn.close()
 
 
-resize_img("images\cloud.png")
-backup_img = PhotoImage(file=r"images\cloud.png")
+resize_img(r"C:\Users\Admin\Documents\python\projects\feemanagement\images\cloud.png")
+backup_img = PhotoImage(file=r"C:\Users\Admin\Documents\python\projects\feemanagement\images\cloud.png")
 backup_btn = ttb.Button(
     tab, text='Backup', command=backup, image=backup_img, compound=RIGHT, bootstyle='info')
 backup_btn.place(x=760, y=10)
@@ -506,8 +496,8 @@ def admin_logout():
     login_frame.place(width=1500, height=2000)
 
 
-resize_img(r"images\logout.png")
-logout_img = PhotoImage(file=r"images\logout.png")
+resize_img(r"C:\Users\Admin\Documents\python\projects\feemanagement\images\logout.png")
+logout_img = PhotoImage(file=r"C:\Users\Admin\Documents\python\projects\feemanagement\images\logout.png")
 logout_btn = ttb.Button(
     tab, text='Logout', command=admin_logout, image=logout_img, compound=RIGHT, bootstyle='danger-outline')
 logout_btn.place(x=1260, y=10, height=40)
@@ -542,12 +532,12 @@ def display_profile(id):
     j = 0
     b = 0
     for col in data.description[:12]:
-        l = ctk.CTkLabel(profile, width=60, text=col[0])
+        l = Label(profile, width=20, text=col[0])
         l.grid(row=b, column=0, padx=50, pady=5, sticky='nsew')
         b += 1
     c = 0
     for col in data.description[12:]:
-        l = ctk.CTkLabel(profile, width=60, text=col[0])
+        l = Label(profile, width=20, text=col[0])
         l.grid(row=c, column=4, padx=50, pady=5, sticky='nsew')
         c += 1
     for i in data:
@@ -688,8 +678,8 @@ def display_profile(id):
         q = db.execute("SELECT * FROM Sheet1")
         messagebox.showinfo('Success', "Data updated Successfully")
 
-    resize_img("images\circular.png")
-    update_img1 = PhotoImage(file=r"images\circular.png")
+    resize_img(r"C:\Users\Admin\Documents\python\projects\feemanagement\images\circular.png")
+    update_img1 = PhotoImage(file=r"C:\Users\Admin\Documents\python\projects\feemanagement\images\circular.png")
     sub_btn = ttb.Button(
         win, text="Update    ", bootstyle='success-outline', image=update_img1, compound=RIGHT, command=submit_record)
     sub_btn.image = update_img1
@@ -711,6 +701,7 @@ def display_profile(id):
         j = 3
         li = []
         lis = []
+
         for i in data:
             for k in range(1, len(i)):
                 e = ttb.Entry(bill_frame, width=60)
@@ -726,8 +717,8 @@ def display_profile(id):
             display_profile(roll_no)
             profile.pack(pady=30)
 
-        resize_img("images\previous.png")
-        previous_img1 = PhotoImage(file=r"images\previous.png")
+        resize_img(r"C:\Users\Admin\Documents\python\projects\feemanagement\images\previous.png")
+        previous_img1 = PhotoImage(file=r"C:\Users\Admin\Documents\python\projects\feemanagement\images\previous.png")
         back_bill = ttb.Button(
             bill_frame, text="Back", bootstyle='danger-outline', image=previous_img1, compound=LEFT, command=back_bill)
         back.image = previous_img1
@@ -737,8 +728,6 @@ def display_profile(id):
         def update_bill():
 
             db = sqlite3.connect('data.db')
-            data = db.execute(
-                'SELECT * from Bill Where Rollno = ?', (roll_no,))
 
             for i in li:
                 billno = i[0].get()
@@ -750,16 +739,31 @@ def display_profile(id):
                 db.execute(
                     "UPDATE Bill SET rollno=?,billno=?,date=?,amount=? WHERE billno=?", d)
                 db.commit()
-
-        resize_img("images\circular.png")
-        update_img = PhotoImage(file=r"images\circular.png")
+        resize_img(r"C:\Users\Admin\Documents\python\projects\feemanagement\images\circular.png")
+        update_img = PhotoImage(file=r"C:\Users\Admin\Documents\python\projects\feemanagement\images\circular.png")
         update_bill = ttb.Button(
             bill_frame, text="Update   ", bootstyle='success-outline', image=update_img, compound=RIGHT, command=update_bill)
         update_bill.image = update_img
-        update_bill.grid(row=10, column=4)
+        if len(li) > 0:
 
-    resize_img(r"images\report.png")
-    det_img1 = PhotoImage(file=r"images\report.png")
+            billno_label = ttb.Label(
+                bill_frame, text='    Bill No:', bootstyle='dark', font=('Arial', 15))
+            billno_label.grid(row=1, column=2, sticky='nsew')
+
+            date_label = ttb.Label(bill_frame, text='    Date:',
+                                   bootstyle='dark', font=('Arial', 15))
+            date_label.grid(row=1, column=3, sticky='nsew')
+
+            amount_label = ttb.Label(bill_frame, text='    Amount:',
+                                     bootstyle='dark', font=('Arial', 15))
+            amount_label.grid(row=1, column=4, sticky='nsew')
+            update_bill.grid(row=j+5, column=4)
+        else:
+            info_label = Label(bill_frame, text="No Bills")
+            info_label.grid(row=3, column=2)
+
+    resize_img(r"C:\Users\Admin\Documents\python\projects\feemanagement\images\report.png")
+    det_img1 = PhotoImage(file=r"C:\Users\Admin\Documents\python\projects\feemanagement\images\report.png")
     det_btn = ttb.Button(
         win, text="Bill Details   ", command=bill_details, image=det_img1, compound=RIGHT, bootstyle='warning')
     det_btn.image = det_img1
@@ -769,60 +773,60 @@ def display_profile(id):
         pdf = FPDF()
         pdf.add_page()
         pdf.set_font("Arial", size=15)
-
+        pdf.image(r'images/header_word1.jpg', w=190)
         pdf.cell(200, 40, txt="FEES INFO", ln=1, align='C')
 
-        pdf.cell(200, 20, txt=f"Rollno : {rollnum}", border=1, ln=2, align='L')
-        pdf.cell(200, 20, txt=f"Name : {name}", border=1, ln=2, align='L')
-        pdf.cell(200, 20, txt=f"Year : {year}", border=1, ln=2, align='L')
+        pdf.cell(180, 20, txt=f"Rollno : {rollnum}", border=1, ln=2, align='L')
+        pdf.cell(180, 20, txt=f"Name : {name}", border=1, ln=2, align='L')
+        pdf.cell(180, 20, txt=f"Year : {year}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 20, txt=f"Department : {dept}", border=1, ln=2, align='L')
+            180, 20, txt=f"Department : {dept}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 20, txt=f"Previous Year Balance : {pyb}", border=1, ln=2, align='L')
+            180, 20, txt=f"Previous Year Balance : {pyb}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 20, txt=f"Admission Fees         : {adfee}", border=1, ln=2, align='L')
+            180, 20, txt=f"Admission Fees         : {adfee}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 20, txt=f"Tution Fees            : {tufee}", border=1, ln=2, align='L')
+            180, 20, txt=f"Tution Fees            : {tufee}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 20, txt=f"Bus Fees               : {busfee}", border=1, ln=2, align='L')
+            180, 20, txt=f"Bus Fees               : {busfee}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 20, txt=f"Hostel Fees            : {hosfee}", border=1, ln=2, align='L')
+            180, 20, txt=f"Hostel Fees            : {hosfee}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 20, txt=f"Total Fees             : {totfee}", border=1, ln=2, align='L')
+            180, 20, txt=f"Total Fees             : {totfee}", border=1, ln=2, align='L')
 
         pdf.cell(200, 40, txt="SCHOLARSHIP INFO", ln=1, align='C')
 
         pdf.cell(
-            200, 20, txt=f"FGG                    : {fgg}", border=1, ln=2, align='L')
+            180, 20, txt=f"FGG                    : {fgg}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 20, txt=f"PMSS                   : {pmss}", border=1, ln=2, align='L')
+            180, 20, txt=f"PMSS                   : {pmss}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 20, txt=f"7.5% GQ                : {gov}", border=1, ln=2, align='L')
+            180, 20, txt=f"7.5% GQ                : {gov}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 20, txt=f"Other scholarships     : {other}", border=1, ln=2, align='L')
+            180, 20, txt=f"Other scholarships     : {other}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 20, txt=f"KET Scholarship        : {ket}", border=1, ln=2, align='L')
+            180, 20, txt=f"KET Scholarship        : {ket}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 20, txt=f"Student to Pay         : {pay}", border=1, ln=2, align='L')
+            180, 20, txt=f"Student to Pay         : {pay}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 20, txt=f"Scholarship Total      : {sctot}", border=1, ln=2, align='L')
+            180, 20, txt=f"Scholarship Total      : {sctot}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 20, txt=f"Remaining Fees         : {rem}", border=1, ln=2, align='L')
+            180, 20, txt=f"Remaining Fees         : {rem}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 20, txt=f"Fees Paid              : {paid}", border=1, ln=2, align='L')
+            180, 20, txt=f"Fees Paid              : {paid}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 20, txt=f"Balance                : {bal}", border=1, ln=2, align='L')
+            180, 20, txt=f"Balance                : {bal}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 20, txt=f"Total Fees Paid        : {totfpaid}", border=1, ln=2, align='L')
+            180, 20, txt=f"Total Fees Paid        : {totfpaid}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 20, txt=f"Current Balance        : {cbal}", border=1, ln=2, align='L')
+            180, 20, txt=f"Current Balance        : {cbal}", border=1, ln=2, align='L')
 
         roll = roll_ent.get()
         pdf.output(roll+".pdf")
         messagebox.showinfo('Success', 'Report Successfully saved')
 
-    resize_img("images\download (1).png")
-    pdf_img1 = PhotoImage(file=r"images\download (1).png")
+    resize_img(r"C:\Users\Admin\Documents\python\projects\feemanagement\images\download (1).png")
+    pdf_img1 = PhotoImage(file=r"C:\Users\Admin\Documents\python\projects\feemanagement\images\download (1).png")
     Getpdf = ttb.Button(
         win, text="Get Pdf    ", bootstyle='success', image=pdf_img1, compound=RIGHT, command=getpdf)
     Getpdf.image = pdf_img1
@@ -840,8 +844,8 @@ def display_profile(id):
         tree_frame.place(x=50, y=80)
         # tab.place()
 
-    resize_img("images\previous.png")
-    previous_img2 = PhotoImage(file=r"images\previous.png")
+    resize_img(r"C:\Users\Admin\Documents\python\projects\feemanagement\images\previous.png")
+    previous_img2 = PhotoImage(file=r"C:\Users\Admin\Documents\python\projects\feemanagement\images\previous.png")
     back = ttb.Button(
         win, text="Back", bootstyle='danger-outline', image=previous_img2, compound=LEFT, command=back)
     back.image = previous_img2
@@ -871,11 +875,11 @@ def cashier_logout():
     login_frame.place(width=1500, height=2000)
 
 
-resize_img(r"images\logout.png")
-cas_logout_img = PhotoImage(file=r"images\logout.png")
+resize_img(r"C:\Users\Admin\Documents\python\projects\feemanagement\images\logout.png")
+cas_logout_img = PhotoImage(file=r"C:\Users\Admin\Documents\python\projects\feemanagement\images\logout.png")
 cashier_logout_btn = ttb.Button(
     cashier, text='Log out', bootstyle='danger-outline', image=cas_logout_img, compound=RIGHT, command=cashier_logout)
-cashier_logout_btn.place(x=770, y=10)
+cashier_logout_btn.place(x=1255, y=10)
 
 
 dep_val = StringVar(cashier)
@@ -898,6 +902,7 @@ def ccpdf():
         "SELECT * FROM Sheet1 Where Department=? AND Year=?", (deptname, yearval))
     pdf = FPDF()
     pdf.add_page()
+    pdf.image(r'images/header_word1.jpg', w=190)
     for row in datas:
         pdf.set_font("Arial", size=20, style="BI")
         pdf.set_text_color(7, 145, 134)
@@ -906,57 +911,57 @@ def ccpdf():
         pdf.set_text_color(0, 0, 0)
 
         pdf.cell(
-            200, 10, txt=f"Rollno                 : {row[1]}", border=1, ln=2, align='L')
+            180, 10, txt=f"Rollno                 : {row[1]}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 10, txt=f"Year                   : {row[4]}", border=1, ln=2, align='L')
+            180, 10, txt=f"Year                   : {row[4]}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 10, txt=f"Department             : {row[5]}", border=1, ln=2, align='L')
+            180, 10, txt=f"Department             : {row[5]}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 10, txt=f"Previous Year Balance  : {row[6]}", border=1, ln=2, align='L')
+            180, 10, txt=f"Previous Year Balance  : {row[6]}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 10, txt=f"Admission Fees         : {row[7]}", border=1, ln=2, align='L')
+            180, 10, txt=f"Admission Fees         : {row[7]}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 10, txt=f"Tution Fees            : {row[8]}", border=1, ln=2, align='L')
+            180, 10, txt=f"Tution Fees            : {row[8]}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 10, txt=f"Bus Fees               : {row[9]}", border=1, ln=2, align='L')
+            180, 10, txt=f"Bus Fees               : {row[9]}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 10, txt=f"Hostel Fees            : {row[10]}", border=1, ln=2, align='L')
+            180, 10, txt=f"Hostel Fees            : {row[10]}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 10, txt=f"Total Fees             : {row[11]}", border=1, ln=2, align='L')
+            180, 10, txt=f"Total Fees             : {row[11]}", border=1, ln=2, align='L')
 
         pdf.cell(200, 30, txt="SCHOLARSHIP INFO", ln=1, align='C')
 
         pdf.cell(
-            200, 10, txt=f"FGG                    : {row[12]}", border=1, ln=2, align='L')
+            180, 10, txt=f"FGG                    : {row[12]}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 10, txt=f"PMSS                   : {row[13]}", border=1, ln=2, align='L')
+            180, 10, txt=f"PMSS                   : {row[13]}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 10, txt=f"7.5% GQ                : {row[14]}", border=1, ln=2, align='L')
+            180, 10, txt=f"7.5% GQ                : {row[14]}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 10, txt=f"Other scholarships     : {row[15]}", border=1, ln=2, align='L')
+            180, 10, txt=f"Other scholarships     : {row[15]}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 10, txt=f"KET Scholarship        : {row[16]}", border=1, ln=2, align='L')
+            180, 10, txt=f"KET Scholarship        : {row[16]}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 10, txt=f"Student to Pay         : {row[17]}", border=1, ln=2, align='L')
+            180, 10, txt=f"Student to Pay         : {row[17]}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 10, txt=f"Scholarship Total      : {row[18]}", border=1, ln=2, align='L')
+            180, 10, txt=f"Scholarship Total      : {row[18]}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 10, txt=f"Remaining Fees         : {row[19]}", border=1, ln=2, align='L')
+            180, 10, txt=f"Remaining Fees         : {row[19]}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 10, txt=f"Fees Paid              : {row[20]}", border=1, ln=2, align='L')
+            180, 10, txt=f"Fees Paid              : {row[20]}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 10, txt=f"Balance                : {row[21]}", border=1, ln=2, align='L')
+            180, 10, txt=f"Balance                : {row[21]}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 10, txt=f"Total Fees Paid        : {row[22]}", border=1, ln=2, align='L')
+            180, 10, txt=f"Total Fees Paid        : {row[22]}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 10, txt=f"Current Balance        : {row[23]}", border=1, ln=2, align='L')
+            180, 10, txt=f"Current Balance        : {row[23]}", border=1, ln=2, align='L')
 
     pdf.output(yearval+"year"+"_"+deptname+".pdf")
     messagebox.showinfo("Success", "Report successfully saved")
 
 
-resize_img("images\download (1).png")
-pdf_img2 = PhotoImage(file=r"images\download (1).png")
+resize_img(r"C:\Users\Admin\Documents\python\projects\feemanagement\images\download (1).png")
+pdf_img2 = PhotoImage(file=r"C:\Users\Admin\Documents\python\projects\feemanagement\images\download (1).png")
 cpdf = ttb.Button(cashier, text='Get Pdf    ', image=pdf_img2,
                   compound=RIGHT, bootstyle='warning', command=ccpdf)
 cpdf.place(x=655, y=10)
@@ -995,8 +1000,6 @@ def submit():
     rollno_ = roll.get()
     billno_ = billno.get()
     amount_ = amount.get()
-    # tkinter.messagebox.showinfo('Print',rollno_)
-    x = datetime.datetime.now()
     date_ = date_ent.entry.get()
     con.execute('''INSERT INTO bill VALUES(?,?,?,?)''',
                 (rollno_, billno_, date_, amount_,))
@@ -1017,61 +1020,61 @@ def submit():
     print("cbal", cbal, "tot", tot, "to_pay", to_pay, "totf", totf, "bal", bal)
     bal = int(to_pay)-int(amount_)
     tot += int(amount_)
-    cbal = int(tot)-cbal
+    cbal = cbal-int(amount_)
     db.execute("UPDATE Sheet1 SET balance=?,Total_Fees_paid=?,Current_Balance=? WHERE rollno=?",
                (bal, tot, cbal, rollno_))
-    b = db.execute('SELECT * FROM Sheet1 where rollno=?', (rollno_,))
-    for i in b:
-        print(i)
-    res = con.execute('''SELECT * FROM bill''')
-    for i in res:
-        r = i[0]
-        print(i)
+    db.commit()
+
     con.commit()
-    con.close()
-    w = Tk()
+    w = ttb.Window(themename="litera")
     w.geometry('300x300')
     rollno_ = 'Roll No: '+rollno_
     billno_ = "Bill No: "+billno_
     amount_ = "Amount: "+amount_
-    a_label = ctk.CTkLabel(w, text=rollno_)
+    a_label = Label(w, text=rollno_)
     a_label.place(x=20, y=20)
-    b_label = ctk.CTkLabel(w, text=billno_)
+    b_label = Label(w, text=billno_)
     b_label.place(x=20, y=70)
-    c_label = ctk.CTkLabel(w, text=amount_)
+    c_label = Label(w, text=amount_)
     c_label.place(x=20, y=120)
 
     def print_bill():
+        now = datetime.datetime.now()
         pdf = FPDF()
         pdf.add_page()
         pdf.set_font("Arial", size=20, style="BI")
         pdf.set_text_color(7, 145, 134)
-        pdf.cell(200, 40, txt=f"Bill :  {billno_}", ln=1, align='C')
+        pdf.image(r'images/header_word1.jpg', w=190)
+        pdf.cell(200, 40, txt=f"{billno_}", ln=1, align='C')
         pdf.set_font("Arial", size=12)
         pdf.set_text_color(0, 0, 0)
 
         pdf.cell(
-            200, 10, txt=f"Roll No                 : {rollno_}", border=1, ln=2, align='L')
+            180, 10, txt=f"{rollno_}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 10, txt=f"Bill No                 : {billno_}", border=1, ln=2, align='L')
+            180, 10, txt=f"{billno_}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 10, txt=f"Date                : {date_}", border=1, ln=2, align='L')
+            180, 10, txt=f"Date: {date_}", border=1, ln=2, align='L')
         pdf.cell(
-            200, 10, txt=f"Amount                 : {amount_}", border=1, ln=2, align='L')
+            180, 10, txt=f"{amount_}", border=1, ln=2, align='L')
+        pdf.cell(
+            180, 10, txt=f"Balance amount to be paid by student: {cbal}", border=1, ln=2, align='L')
+        pdf.cell(
+            180, 10, txt=f"Total Bill paid: {tot}", border=1, ln=2, align='L')
         n = roll.get()+"_"+billno.get()+"_"+'.pdf'
         pdf.output(n)
-        print(n)
-        with io.open(n) as file:
-            if file:
-                win32api.ShellExecute(0, "print", file, None, ".", 0)
-    btn = ttb.Button(w, text='print', command=print_bill)
+
+        # with io.open(n) as file:
+        #    if file:
+        #        win32api.ShellExecute(0, "print", file, None, ".", 0)
+    btn = ttb.Button(w, text='print', bootstyle='danger', command=print_bill)
     btn.place(x=50, y=170)
     w.geometry('300x300')
     w.mainloop()
 
 
-resize_img(r"images\upload.png")
-upload_img = PhotoImage(file=r"images\upload.png")
+resize_img(r"C:\Users\Admin\Documents\python\projects\feemanagement\images\upload.png")
+upload_img = PhotoImage(file=r"C:\Users\Admin\Documents\python\projects\feemanagement\images\upload.png")
 submit_btn = ttb.Button(cashier, text='Submit   ',
                         image=upload_img, compound=RIGHT, bootstyle='primary-outline', command=submit)
 submit_btn.place(x=690, y=390, height=40)
